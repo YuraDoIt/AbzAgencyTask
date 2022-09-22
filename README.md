@@ -34,9 +34,7 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
 
-## Stay in touch
-
-## License
-
+## Docker run
+docker build -t abz-app-image .
+docker run -d -p 3000:3000 --name abz-app abz-app-image

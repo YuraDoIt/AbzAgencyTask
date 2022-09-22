@@ -1,0 +1,31 @@
+services:
+  postgres:
+      image: postgres
+      restart: always
+      environment:
+        POSTGRES_DB: "managment"
+        POSTGRES_USER: "yura"
+        POSTGRES_PASSWORD: "yurapass"
+      container_name: postgres-db
+      ports:
+        - "5432:5432"
+      volumes:
+        - ./pgdata:/var/lib/postgresql/data
+
+  server:
+    build: ./
+    image: managment-app:latest
+    restart: unless-stopped
+    ports: 
+    - 3000:3000
+    container_name: nest-managment-app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+  
+volumes:
+  pgdata:  
+  
+  
