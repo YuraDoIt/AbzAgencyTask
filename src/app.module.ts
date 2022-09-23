@@ -6,7 +6,6 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -15,10 +14,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'postgres-db',
-      port: 5432,
-      username: 'yura',
-      password: 'yurapass',
+      host: 'localhost',
+      port: 5433,
+      username: 'postgres',
+      password: '12345',
       database: "managment",
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,

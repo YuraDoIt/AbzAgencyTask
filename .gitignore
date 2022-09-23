@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+/pgdata
+/pgdata/*
 
 # Logs
 logs
@@ -36,4 +38,4 @@ lerna-debug.log*
 
 Node.js Developer Test Assignment.pdf
 
-/pgdata
+/
