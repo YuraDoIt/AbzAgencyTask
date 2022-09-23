@@ -10,7 +10,7 @@ type Mutation {
 
 type Query {
   getAll: [UserEntity!]!
-  users: String!
+  getUserById(id: Float!): UserEntity!
 }
 
 """Token generate response"""
@@ -25,7 +25,6 @@ input UserCreateDTO {
   name: String
   phone: String
   photo: String
-  position: String
   position_id: Float
   registration_timestamp: Float
 }
@@ -37,7 +36,6 @@ type UserEntity {
   name: String
   phone: String
   photo: String
-  position: String
   position_id: Float
   registration_timestamp: Float
 }

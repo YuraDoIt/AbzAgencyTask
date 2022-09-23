@@ -13,9 +13,6 @@ export class UserCreateDTO {
   @Field(() => String, {nullable: true})
   phone: string;
 
-  @Field(() => String, {nullable: true})
-  position: string;
-
   @Field(() => Number, {nullable: true})
   position_id: number;
 

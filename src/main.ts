@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors();
-  app.useStaticAssets(join(__dirname, '../public'));
-  app.setBaseViewsDir(join(__dirname, '../views'));
+  app.useStaticAssets(join(__dirname, '../views'));
+  app.setBaseViewsDir(join(__dirname, '../client'));
   app.setViewEngine('ejs')
 
   console.log(Date.now())
