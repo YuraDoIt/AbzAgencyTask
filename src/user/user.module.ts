@@ -1,22 +1,18 @@
 import { Module } from '@nestjs/common';
-import { UserResolver } from './user.resolver';
+import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TokenEntity } from '../token/entity/token.entity';
+import { TokenModule } from '../token/token.module';
+import { TokenService } from '../token/token.service';
 import { UserEntity } from './entities/user.entity';
-import { UserService } from './user.service';
-import { JwtModule } from '@nestjs/jwt';
 import { UserController } from './user.controller';
+import { UserResolver } from './user.resolver';
+import { UserService } from './user.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity]),
-    JwtModule.register({
-      secret: 'topsecret',
-      signOptions: {
-        expiresIn: 60 * 40,
-      },
-    }),
-  ],
-  providers: [UserResolver, UserService],
+  imports: [TypeOrmModule.forFeature([UserEntity, TokenEntity]), TokenModule],
+  providers: [UserResolver, UserService, JwtService, TokenService],
   controllers: [UserController],
+  exports: [UserService],
 })
 export class UserModule {}

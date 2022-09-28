@@ -2,38 +2,8 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input FilterUserDto {
-  count: Float!
-  offset: Float!
-  page: Float!
-}
-
-type Mutation {
-  create(UserCreateDTO: UserCreateDTO!): UserEntity!
-  genSeeds: [UserEntity!]!
-  tokenGenerate: TokenResponseDTO!
-}
-
 type Query {
   getAll: [UserEntity!]!
-  getUserById(id: Float!): UserEntity!
-  users(filter: FilterUserDto!): [UserEntity!]!
-}
-
-"""Token generate response"""
-type TokenResponseDTO {
-  success: Boolean
-  token: String
-}
-
-"""User create dto"""
-input UserCreateDTO {
-  email: String
-  name: String
-  phone: String
-  photo: String
-  position_id: Float
-  registration_timestamp: Float
 }
 
 """User entity"""

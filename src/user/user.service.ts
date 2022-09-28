@@ -1,24 +1,63 @@
 import { faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GraphQLError } from 'graphql';
 import { Repository } from 'typeorm';
+import { TokenService } from './../token/token.service';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UserCreateDTO } from './dto/user-create.dto';
+import { UserResponse } from './dto/user.response';
 import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
-    private jwtService: JwtService,
+    private tokenService: TokenService,
   ) {}
 
-  async findAllUser(): Promise<UserEntity[]> {
-    const users = await this.userRepo.find();
-    console.log(users);
-    return await this.userRepo.find();
+  async findAllUser(query: any): Promise<UserResponse> {
+    let { page, offset } = query;
+    if (!page) {
+      page = 1;
+    }
+    if (!offset) {
+      offset = 1;
+    }
+
+    if (page < 0) {
+      throw new HttpException(
+        'page must be more than 0',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (offset < 0) {
+      throw new HttpException(
+        'offset must be more than 0',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const users: UserEntity[] = await this.userRepo.find({
+      order: {
+        id: 'ASC',
+      },
+      skip: offset,
+      take: page,
+    });
+    const count = users.length;
+
+    return {
+      success: true,
+      page: 1,
+      total_pages: 10,
+      total_users: await this.getUserCount(),
+      count: count,
+      links: {
+        next_url: 'next_page',
+        prev_url: 'prev_page',
+      },
+      users: users,
+    };
   }
 
   async createUser(UserCreateDTO: UserCreateDTO): Promise<UserEntity> {
@@ -29,22 +68,34 @@ export class UserService {
     const phoneRegExp = new RegExp(/^[\+]{0,1}380([0-9]{9})$/);
 
     if (UserCreateDTO.name.length < 2 || UserCreateDTO.name.length > 60) {
-      throw new GraphQLError('length of name shoult be > 2 and < 60');
+      throw new HttpException(
+        'length of name shoult be > 2 and < 60',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (!emailRegExp.test(UserCreateDTO.email)) {
-      throw new GraphQLError('mail not match with real mail');
+      throw new HttpException(
+        'mail not match with real mail',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (!phoneRegExp.test(UserCreateDTO.phone)) {
-      throw new GraphQLError('phone not match with correct phone(+380)');
+      throw new HttpException(
+        'phone not match with correct phone(+380)',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (
       UserCreateDTO.position_id < 1 &&
       typeof UserCreateDTO.position_id != 'bigint'
     ) {
-      throw new GraphQLError('position_is should be > 1');
+      throw new HttpException(
+        'position_is should be > 1',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     let userData: UserEntity = await this.userRepo.create({
@@ -56,7 +107,7 @@ export class UserService {
         new Date().getTime() + Math.floor(Math.random() * 1000),
     });
 
-    const token = await this.tokenGenerate();
+    const token = await this.tokenService.tokenGenerate();
     console.log(token);
 
     await this.userRepo.insert(userData);
@@ -73,11 +124,17 @@ export class UserService {
     const phoneRegExp = new RegExp(/^[\+]{0,1}380([0-9]{9})$/);
 
     if (UserCreateDTO.name.length < 2 || UserCreateDTO.name.length > 60) {
-      throw new GraphQLError('length of name shoult be > 2 and < 60');
+      throw new HttpException(
+        'length of name shoult be > 2 and < 60',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (!emailRegExp.test(UserCreateDTO.email)) {
-      throw new GraphQLError('mail not match with real mail');
+      throw new HttpException(
+        'mail not match with real mail',
+        HttpStatus.BAD_REQUEST,
+      );
     } else {
       Object.assign(fails, {
         email: ['The email must be a valid email address.'],
@@ -85,14 +142,20 @@ export class UserService {
     }
 
     if (!phoneRegExp.test(UserCreateDTO.phone)) {
-      throw new GraphQLError('phone not match with correct phone(+380)');
+      throw new HttpException(
+        'phone not match with correct phone(+380)',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (
       UserCreateDTO.position_id < 1 &&
       typeof UserCreateDTO.position_id != 'bigint'
     ) {
-      throw new GraphQLError('position_is should be > 1');
+      throw new HttpException(
+        'position_is should be > 1',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     let userData: UserEntity = await this.userRepo.create({
@@ -104,29 +167,11 @@ export class UserService {
         new Date().getTime() + Math.floor(Math.random() * 1000),
     });
 
-    const token = await this.tokenGenerate();
+    const token = await this.tokenService.tokenGenerate();
     console.log(token);
 
     await this.userRepo.insert(userData);
     return userData;
-  }
-
-  async seedUsers(): Promise<UserEntity[]> {
-    const userArray: UserEntity[] = [];
-
-    for (let i = 0; i < 45; i++) {
-      const seedUser = await this.userRepo.create({
-        email: faker.internet.email(),
-        name: faker.name.fullName(),
-        phone: faker.phone.number(),
-        registration_timestamp: Date.now(),
-      });
-      userArray.push(seedUser);
-    }
-
-    await this.userRepo.insert(userArray);
-    console.log(await this.getUserCount());
-    return userArray;
   }
 
   async seedUsersSucess() {
@@ -143,29 +188,26 @@ export class UserService {
     }
 
     await this.userRepo.insert(userArray);
-    console.log(await this.getUserCount());
+    // console.log(await this.getUserCount());
     return {
       success: 'sucess',
       data: userArray,
     };
   }
 
-  async tokenGenerate(): Promise<{
-    success: boolean;
-    token: any;
-  }> {
-    let token = await this.jwtService.signAsync({}, { expiresIn: '40m' });
-    console.log(token);
-
-    if (token) {
-      return { success: true, token: token };
-    }
-  }
-
   async getUserById(id: number): Promise<UserEntity> {
+    id = Number(id);
+
+    if (typeof id !== 'number') {
+      throw new TypeError(`Expected number but got: ${typeof id}`);
+    }
+
     const user = await this.userRepo.findOneBy({ id: id });
     if (!user) {
-      throw new GraphQLError('User not registered yet, try again');
+      throw new HttpException(
+        'User not registered yet, try again',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     return user;
   }

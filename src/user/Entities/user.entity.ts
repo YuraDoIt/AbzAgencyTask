@@ -7,7 +7,7 @@ import { PositionEntity } from 'src/positions/entity/position.entity';
 @Entity('userentity')
 export class UserEntity {
   @Field(() => ID, { nullable: true })
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Field(() => String, { nullable: true })

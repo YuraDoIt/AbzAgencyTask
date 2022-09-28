@@ -2,15 +2,19 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
-import { AppController } from './app.controller';
-import { UserModule } from './user/user.module';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './user/entities/user.entity';
+import { join } from 'path';
 import { PositionEntity } from 'src/positions/entity/position.entity';
+import { AppController } from './app.controller';
+import { TokenEntity } from './token/entity/token.entity';
+import { TokenModule } from './token/token.module';
+import { UserEntity } from './user/entities/user.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
+    TokenModule,
     UserModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
@@ -21,7 +25,7 @@ import { PositionEntity } from 'src/positions/entity/position.entity';
       username: 'postgres',
       password: '12345',
       database: 'managment',
-      entities: [UserEntity, PositionEntity],
+      entities: [UserEntity, PositionEntity, TokenEntity],
       synchronize: true,
       migrationsRun: true,
       logging: true,
@@ -32,6 +36,7 @@ import { PositionEntity } from 'src/positions/entity/position.entity';
       playground: true,
       sortSchema: true,
     }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [],
