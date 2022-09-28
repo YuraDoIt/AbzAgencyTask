@@ -5,9 +5,7 @@ import { PositionResolver } from './position.resolver';
 import { PositionService } from './position.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([PositionEntity]),
-    ],
-    providers: [PositionResolver, PositionService],
+  imports: [TypeOrmModule.forFeature([PositionEntity])],
+  providers: [PositionResolver, PositionService],
 })
 export class UserModule {}

@@ -10,9 +10,9 @@ async function bootstrap() {
   app.enableCors();
   app.useStaticAssets(join(__dirname, '../views'));
   app.setBaseViewsDir(join(__dirname, '../client'));
-  app.setViewEngine('ejs')
+  app.setViewEngine('ejs');
 
-  console.log(Date.now())
+  console.log(Date.now());
 
   await app.listen(port);
 }

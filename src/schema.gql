@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input FilterUserDto {
+  count: Float!
+  offset: Float!
+  page: Float!
+}
+
 type Mutation {
   create(UserCreateDTO: UserCreateDTO!): UserEntity!
   genSeeds: [UserEntity!]!
@@ -11,6 +17,7 @@ type Mutation {
 type Query {
   getAll: [UserEntity!]!
   getUserById(id: Float!): UserEntity!
+  users(filter: FilterUserDto!): [UserEntity!]!
 }
 
 """Token generate response"""
@@ -36,6 +43,7 @@ type UserEntity {
   name: String
   phone: String
   photo: String
+  position: UserEntity!
   position_id: Float
   registration_timestamp: Float
 }

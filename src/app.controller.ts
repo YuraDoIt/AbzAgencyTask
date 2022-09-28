@@ -8,15 +8,15 @@ export class AppController {
   @Render('index.ejs')
   renderMainPage() {
     return {
-      message: "hello"
-    }
+      message: 'hello',
+    };
   }
 
   @Get('name')
   @Render('index.ejs')
   renderName() {
     return {
-      message: "name"
-    }
+      message: 'name',
+    };
   }
 }

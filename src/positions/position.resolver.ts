@@ -3,13 +3,10 @@ import { PositionService } from './position.service';
 
 @Resolver()
 export class PositionResolver {
-  constructor(
-    private readonly positionService: PositionService
-  ) {}
+  constructor(private readonly positionService: PositionService) {}
 
   @Query(() => String)
   async getAll() {
-   return 'yes';
+    return 'yes';
   }
-
 }
