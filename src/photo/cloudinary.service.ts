@@ -8,15 +8,14 @@ export class CloudinaryService {
     file: Express.Multer.File,
   ): Promise<UploadApiResponse | UploadApiErrorResponse> {
     return new Promise((resolve, reject) => {
-      const upload = v2.uploader.upload_stream((error, result) => {
-        if (error) return reject(error);
-        console.log(result.secure_url);
-        resolve(result);
-      });
+      const upload = v2.uploader.upload_stream(
+        { height: 70, width: 70, crop: 'fill' },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        },
+      );
 
-      console.log(upload);
-
-      // console.log(toStream(file.buffer).pipe(upload));
       toStream(file.buffer).pipe(upload);
     });
   }
