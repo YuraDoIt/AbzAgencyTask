@@ -15,6 +15,6 @@ export class PhotoController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async photoUpload(@UploadedFile() file: Express.Multer.File) {
-    await this.photoService.uploadFile(file);
+    await this.photoService.FileZip(file);
   }
 }
