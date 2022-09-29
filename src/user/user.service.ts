@@ -2,6 +2,8 @@ import { faker } from '@faker-js/faker';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PositionEntity } from '../positions/entity/position.entity';
+import { PositionService } from '../positions/position.service';
 import { TokenService } from './../token/token.service';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UserCreateDTO } from './dto/user-create.dto';
@@ -12,7 +14,10 @@ import { UserEntity } from './entities/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+    @InjectRepository(PositionEntity)
+    private positionRepo: Repository<PositionEntity>,
     private tokenService: TokenService,
+    private positionService: PositionService,
   ) {}
 
   async findAllUser(query: any): Promise<UserResponse> {
@@ -102,7 +107,6 @@ export class UserService {
       email: UserCreateDTO.email,
       name: UserCreateDTO.name,
       phone: UserCreateDTO.phone,
-      position_id: UserCreateDTO.position_id,
       registration_timestamp:
         new Date().getTime() + Math.floor(Math.random() * 1000),
     });
@@ -162,7 +166,6 @@ export class UserService {
       email: UserCreateDTO.email,
       name: UserCreateDTO.name,
       phone: UserCreateDTO.phone,
-      position_id: UserCreateDTO.position_id,
       registration_timestamp:
         new Date().getTime() + Math.floor(Math.random() * 1000),
     });
@@ -175,41 +178,60 @@ export class UserService {
   }
 
   async seedUsersSucess() {
+    await this.positionService.createSeedPosition();
     const userArray: UserEntity[] = [];
 
     for (let i = 0; i < 45; i++) {
       const seedUser = await this.userRepo.create({
         email: faker.internet.email(),
         name: faker.name.fullName(),
-        phone: faker.phone.number(),
+        phone: '+380' + faker.phone.number(),
         registration_timestamp: Date.now(),
+        position: {
+          id: Math.ceil(Math.random() * 4),
+        },
       });
       userArray.push(seedUser);
     }
 
     await this.userRepo.insert(userArray);
-    // console.log(await this.getUserCount());
+
+    let user = await this.userRepo.find({
+      relations: {
+        position: true,
+      },
+    });
+
     return {
       success: 'sucess',
-      data: userArray,
+      data: user,
     };
   }
 
-  async getUserById(id: number): Promise<UserEntity> {
+  async getUserById(id: number): Promise<any> {
     id = Number(id);
 
     if (typeof id !== 'number') {
-      throw new TypeError(`Expected number but got: ${typeof id}`);
+      return {
+        success: false,
+        message: 'Validation failed',
+        fails: {
+          user_id: ['The user_id must be an integer.'],
+        },
+      };
     }
 
     const user = await this.userRepo.findOneBy({ id: id });
     if (!user) {
-      throw new HttpException(
-        'User not registered yet, try again',
-        HttpStatus.BAD_REQUEST,
-      );
+      return {
+        success: false,
+        message: 'The user with the requested identifier does not exist',
+        fails: {
+          user_id: ['User not found'],
+        },
+      };
     }
-    return user;
+    return { success: true, user: user };
   }
 
   async getUserCount(): Promise<number> {

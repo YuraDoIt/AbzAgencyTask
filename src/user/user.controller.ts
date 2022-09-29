@@ -5,10 +5,15 @@ import {
   Post,
   Query,
   Req,
+  UploadedFile,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Args } from '@nestjs/graphql';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
+import { Express } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserResponse } from './dto/user.response';
@@ -42,12 +47,9 @@ export class UserController {
     return await this.userService.getUserById(id);
   }
 
-  // @Get('/token')
-  // @UseGuards(AuthGuard)
-  // async generateToken(): Promise<{
-  //   success: boolean;
-  //   token: any;
-  // }> {
-  //   return await this.userService.tokenGenerate();
-  // }
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async photoUpload(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+  }
 }

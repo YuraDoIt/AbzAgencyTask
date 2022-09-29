@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { PositionEntity } from 'src/positions/entity/position.entity';
 import { AppController } from './app.controller';
+import { PhotoModule } from './photo/photo.module';
+import { PositionModule } from './positions/position.module';
 import { TokenEntity } from './token/entity/token.entity';
 import { TokenModule } from './token/token.module';
 import { UserEntity } from './user/entities/user.entity';
@@ -16,6 +18,8 @@ import { UserModule } from './user/user.module';
   imports: [
     TokenModule,
     UserModule,
+    PositionModule,
+    PhotoModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       dropSchema: true,

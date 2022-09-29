@@ -14,6 +14,5 @@ type UserEntity {
   phone: String
   photo: String
   position: UserEntity!
-  position_id: Float
   registration_timestamp: Float
 }

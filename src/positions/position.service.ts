@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GraphQLError } from 'graphql';
 import { Repository } from 'typeorm';
@@ -13,13 +12,36 @@ export class PositionService {
     private positionRepo: Repository<PositionEntity>,
   ) {}
 
-  async getPosition(): Promise<PositionEntity[]> {
+  async getPosition(): Promise<any> {
     const position = await this.positionRepo.find();
 
-    if (!position) {
-      throw new GraphQLError('Cannot find any position');
+    console.log(position);
+    if (!(typeof position !== 'undefined' && position.length > 0)) {
+      throw new HttpException(
+        'Cannot find any position',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    return position;
+    return {
+      success: true,
+      positions: position,
+    };
+  }
+
+  async createSeedPosition(): Promise<PositionEntity[]> {
+    for (let i = 0; i < 4; i++) {
+      await this.positionRepo
+        .createQueryBuilder()
+        .insert()
+        .into(PositionEntity)
+        .values([{ name: faker.commerce.department() }])
+        .execute();
+    }
+    return await this.positionRepo.find();
+  }
+
+  async createPos() {
+    await this.positionRepo.insert({ name: 'position' });
   }
 }

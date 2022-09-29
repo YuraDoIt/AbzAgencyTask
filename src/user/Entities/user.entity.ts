@@ -25,11 +25,6 @@ export class UserEntity {
   phone: string;
 
   @Field(() => Number, { nullable: true })
-  @Min(1)
-  @Column('int', { nullable: true })
-  position_id: number;
-
-  @Field(() => Number, { nullable: true })
   @Column('bigint', { nullable: true })
   registration_timestamp: number;
 
