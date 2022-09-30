@@ -1,11 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import path from 'path';
-import tinify from 'tinify';
-import { v4 as uuidv4 } from 'uuid';
-import * as sharp from 'sharp';
-import * as cloudinary from 'cloudinary';
 import { CloudinaryService } from './cloudinary.service';
-import { Readable } from 'stream';
 
 @Injectable()
 export class PhotoService {

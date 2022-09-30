@@ -33,11 +33,16 @@ export class UserController {
     return await this.userService.findAllUser({ ...request.query });
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Post('users')
-  async createUser(@Body() userCreateDTO: UserCreateDTO) {
+  @UseInterceptors(FileInterceptor('file'))
+  async createUser(
+    @Body() userCreateDTO: UserCreateDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     console.log(userCreateDTO);
-    return await this.userService.createUserMessage(userCreateDTO);
+    console.log(file);
+    return await this.userService.createUserMessage(file, userCreateDTO);
   }
 
   @UseGuards(AuthGuard)

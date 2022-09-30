@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CloudinaryService } from '../photo/cloudinary.service';
 import { PositionEntity } from '../positions/entity/position.entity';
 import { PositionService } from '../positions/position.service';
 import { TokenService } from './../token/token.service';
@@ -25,6 +26,7 @@ export class UserService {
     private positionRepo: Repository<PositionEntity>,
     private tokenService: TokenService,
     private positionService: PositionService,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   async findAllUser(query: any): Promise<UserResponse> {
@@ -92,7 +94,7 @@ export class UserService {
     };
   }
 
-  async createUserMessage(UserCreateDTO: UserCreateDTO): Promise<any> {
+  async createUserMessage(file, UserCreateDTO: UserCreateDTO): Promise<any> {
     let fails: failsType = {};
 
     if (
@@ -159,12 +161,15 @@ export class UserService {
       );
     }
 
+    let fileUpload = await this.cloudinaryService.uploadImage(file);
+
     let userData: UserEntity = await this.userRepo.create({
       email: UserCreateDTO.email,
       name: UserCreateDTO.name,
       phone: UserCreateDTO.phone,
       registration_timestamp:
         new Date().getTime() + Math.floor(Math.random() * 1000),
+      photo: fileUpload.url,
     });
 
     await this.userRepo.insert(userData);

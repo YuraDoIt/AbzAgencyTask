@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CloudinaryService } from '../photo/cloudinary.service';
 import { PositionEntity } from '../positions/entity/position.entity';
 import { PositionModule } from '../positions/position.module';
 import { PositionService } from '../positions/position.service';
@@ -24,6 +25,7 @@ import { UserService } from './user.service';
     JwtService,
     TokenService,
     PositionService,
+    CloudinaryService,
   ],
   controllers: [UserController],
   exports: [UserService],
