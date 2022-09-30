@@ -162,6 +162,16 @@ export class UserService {
     }
 
     let fileUpload = await this.cloudinaryService.uploadImage(file);
+    if (fileUpload.bytes < 5000000) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          message: 'File cannot be more 5mb',
+          fails: fails,
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
 
     let userData: UserEntity = await this.userRepo.create({
       email: UserCreateDTO.email,
