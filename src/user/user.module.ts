@@ -10,6 +10,7 @@ import { TokenModule } from '../token/token.module';
 import { TokenService } from '../token/token.service';
 import { UserEntity } from './entities/user.entity';
 import { UserController } from './user.controller';
+import { UserPageController } from './user.page.controller';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 
@@ -27,7 +28,7 @@ import { UserService } from './user.service';
     PositionService,
     CloudinaryService,
   ],
-  controllers: [UserController],
+  controllers: [UserController, UserPageController],
   exports: [UserService],
 })
 export class UserModule {}

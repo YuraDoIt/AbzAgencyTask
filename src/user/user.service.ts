@@ -31,6 +31,7 @@ export class UserService {
 
   async findAllUser(query: any): Promise<UserResponse> {
     let { count, page, offset } = query;
+    console.log(query.page);
     if (!page) {
       page = 1;
     }
@@ -40,6 +41,9 @@ export class UserService {
     if (!offset) {
       offset = 5;
     }
+
+    page = Number(page);
+    count = Number(count);
 
     if (page < 0 || count < 0 || offset < 0) {
       throw new HttpException(
@@ -71,9 +75,6 @@ export class UserService {
       (await (await this.userRepo.find()).length) / count,
     );
 
-    let nextPage = `localhost:3000/users?page=${page + 1}&count=${count}`;
-    let prevPage = `localhost:3000/users?page=${page - 1}&count=${count}`;
-
     return {
       success: true,
       page: page,
@@ -84,17 +85,19 @@ export class UserService {
         next_url:
           Number(page) + 1 > totalPage
             ? null
-            : `localhost:3000/users?page=${page}&count=${count}`,
+            : `http://localhost:3000/table?page=${page + 1}&count=${count}`,
         prev_url:
           Number(page) - 1 < 1
             ? null
-            : `localhost:3000/users?page=${page - 1}&count=${count}`,
+            : `http://localhost:3000/table?page=${Number(
+                page - 1,
+              )}&count=${count}`,
       },
       users: users,
     };
   }
 
-  async createUserMessage(file, UserCreateDTO: UserCreateDTO): Promise<any> {
+  async createUser(file, UserCreateDTO: UserCreateDTO): Promise<any> {
     let fails: failsType = {};
 
     if (

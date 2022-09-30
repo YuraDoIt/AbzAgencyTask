@@ -9,7 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import {} from '@nestjs/common/decorators';
+import { Render } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
@@ -27,22 +27,20 @@ export class UserController {
     return await this.userService.seedUsersSucess();
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get('users')
   async getAll(@Req() request: Request): Promise<UserResponse> {
     return await this.userService.findAllUser({ ...request.query });
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('users')
   @UseInterceptors(FileInterceptor('file'))
   async createUser(
     @Body() userCreateDTO: UserCreateDTO,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile('file') file: Express.Multer.File,
   ) {
-    console.log(userCreateDTO);
-    console.log(file);
-    return await this.userService.createUserMessage(file, userCreateDTO);
+    return await this.userService.createUser(file, userCreateDTO);
   }
 
   @UseGuards(AuthGuard)
