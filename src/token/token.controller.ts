@@ -8,9 +8,9 @@ import { TokenService } from './token.service';
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}
 
-  @Get('/token')
+  @Get('api/v1/token')
   @Render('token.ejs')
-  async generateToken() {
+  async generateTokenPage() {
     let token = await this.tokenService.tokenGenerate();
     return {
       status: token.success,
@@ -18,10 +18,10 @@ export class TokenController {
     };
   }
 
-  // @Get('/token')
-  // async generateToken(): Promise<TokenResponse> {
-  //   return await this.tokenService.tokenGenerate();
-  // }
+  @Get('/token')
+  async generateToken(): Promise<TokenResponse> {
+    return await this.tokenService.tokenGenerate();
+  }
 
   @Cron('*/45 * * * *')
   async clearToken() {

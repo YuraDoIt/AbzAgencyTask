@@ -9,7 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Render } from '@nestjs/common/decorators';
+import { Delete, Render } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
@@ -21,7 +21,6 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard)
   @Get('seed')
   async seedUsers() {
     return await this.userService.seedUsersSucess();
@@ -33,7 +32,7 @@ export class UserController {
     return await this.userService.findAllUser({ ...request.query });
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Post('users')
   @UseInterceptors(FileInterceptor('file'))
   async createUser(
@@ -43,7 +42,6 @@ export class UserController {
     return await this.userService.createUser(file, userCreateDTO);
   }
 
-  @UseGuards(AuthGuard)
   @Get('users/:id')
   async getUserById(@Param('id') id: number) {
     return await this.userService.getUserById(id);
@@ -53,5 +51,10 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   async photoUpload(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
+  }
+
+  @Delete('delete')
+  async deleteAllUsert() {
+    return await this.userService.deleteAllUsers();
   }
 }

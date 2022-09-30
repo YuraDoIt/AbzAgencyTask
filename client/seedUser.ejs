@@ -1,0 +1,24 @@
+<%- include ("./chablon/head.ejs") %>
+    <body>
+
+        <%- include ("./chablon/nav.ejs") %>
+
+
+        <table style= "border: 1px solid white;
+        border-collapse: collapse;">
+            <tr>
+              <th>№</th><th>Email</th><th>Name</th><th>Phone</th>
+            </tr>
+         
+            <% for (var i = 0; i < quotation.length; i++) { %>
+             <tr>
+              <td><%= quotation[i].id %></td>
+               <td><%= quotation[i].email %></td>
+               <td><%= quotation[i].name %></td>
+               <td><%= quotation[i].phone %></td>
+             </tr>    
+            <% } %>
+
+         </table>
+
+        <%- include ("./chablon/footer.ejs") %>

@@ -85,11 +85,13 @@ export class UserService {
         next_url:
           Number(page) + 1 > totalPage
             ? null
-            : `http://localhost:3000/table?page=${page + 1}&count=${count}`,
+            : `http://localhost:3000/api/v1/table?page=${
+                page + 1
+              }&count=${count}`,
         prev_url:
           Number(page) - 1 < 1
             ? null
-            : `http://localhost:3000/table?page=${Number(
+            : `http://localhost:3000/api/v1/table?page=${Number(
                 page - 1,
               )}&count=${count}`,
       },
@@ -261,5 +263,10 @@ export class UserService {
       arr.push(Math.ceil(Math.random() * 10));
     }
     return Number(arr.join(''));
+  }
+
+  async deleteAllUsers(): Promise<string> {
+    await this.userRepo.clear();
+    return 'success';
   }
 }

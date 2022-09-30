@@ -4,26 +4,17 @@
     <body>
         <%- include ("./chablon/nav.ejs") %>
     
-        <div class="container" id="app">
-            <main>            
-                <div class="row">
                     <div class="col-md-8">
                         <form method="get" action="http://localhost:3000/token">
                             
                             <p>Status: <%= status %></p>
                             <p id="tokenField">Token: <%= token %></p>
-                            <p id="test">test</p>
                             <div class="form-group">
                                 <button class="btn btn-success" id="submitButton" type="submit">Submit</button>
                             </div>
                         </form>
-
-                
                     </div>
-                </div> 
-            </main>
-        </div>
-
+     
         <script>
             $(document).ready(function() {
             let token = document.getElementById('tokenField');
@@ -31,7 +22,7 @@
             let tokenFromDocument = token.textContent.split(' ')[1];
             $('#submitButton').on('click',function(){
             $.ajax({
-                  url: "http://localhost:3000/token",
+                  url: "http://localhost:3000/api/v1/token",
                   type: 'Get',
                   contentType: 'application/json',
                   headers: {

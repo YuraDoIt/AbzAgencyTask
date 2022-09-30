@@ -1,0 +1,65 @@
+<%- include ("./chablon/head.ejs") %>
+    <body>
+
+        <%- include ("./chablon/nav.ejs") %>
+
+        <p>Total page: <%= total_pages%></p>
+        <p>Total users: <%= total_users%></p>
+        <table>
+            <tr>
+               <th>N</th><th>Email</th><th>Name</th><th>Phone</th>
+            </tr>
+         
+            <% for (var i = 0; i < quotation.length; i++) { %>
+             <tr>
+              <td><%= quotation[i].id %></td>
+               <td><%= quotation[i].email %></td>
+               <td><%= quotation[i].name %></td>
+               <td><%= quotation[i].phone %></td>
+             </tr>    
+            <% } %>
+
+         </table>
+<!-- 
+         <% quotation.forEach(data => { %>
+            <h1><%= data.name%></h1>
+            <h1><%= data.phone%></h1>
+        <% }) %> -->
+
+        
+        <button><a href="<%= prevPage %>">prevPage</a></button> 
+        <button><a href="<%= pageNext %>">pageNext</a></button>
+    </div>
+    <% if (pages > 0) { %>
+        <ul class="pagination text-center">
+            <% if (current == 1) { %>
+                <li class="disabled"><a>First</a></li>
+            <% } else { %>
+                <li><a href="/api/v1/table?page=1">First</a></li>
+            <% } %>
+            <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+            <% if (i !== 1) { %>
+                <li class="disabled"><a>...</a></li>
+            <% } %>
+            <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                <% if (i == current) { %>
+                    <li class="active"><a><%= i %></a></li>
+                <% } else { %>
+                    <li><a href="/api/v1/table?page=<%= i %>&count=6"><%= i %></a></li>
+                <% } %>
+                <% if (i == Number(current) + 4 && i < pages) { %>
+                    <li class="disabled"><a>...</a></li>
+                <% } %>
+            <% } %>
+            <% if (current == pages) { %>
+                <li class="disabled"><a>Last</a></li>
+            <% } else { %>
+                <li><a href="/api/v1/table?page=<%= pages %>">Last</a></li>
+            <% } %>
+        </ul>
+    <% } %>
+</div>
+
+        <%- include ("./chablon/footer.ejs") %>
+
+
