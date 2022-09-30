@@ -9,7 +9,7 @@ export class CloudinaryService {
   ): Promise<UploadApiResponse | UploadApiErrorResponse> {
     return new Promise((resolve, reject) => {
       const upload = v2.uploader.upload_stream(
-        { height: 70, width: 70, crop: 'fill' },
+        { height: 70, width: 70, crop: 'fill', chunk_size: 1500000 },
         (error, result) => {
           if (error) return reject(error);
           resolve(result);

@@ -1,19 +1,17 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
   Post,
-  Query,
   Req,
   UploadedFile,
-  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Args } from '@nestjs/graphql';
+import {} from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import { Express } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserResponse } from './dto/user.response';
@@ -35,9 +33,10 @@ export class UserController {
     return await this.userService.findAllUser({ ...request.query });
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('users')
-  async createUser(@Args('UserCreateDTO') userCreateDTO: UserCreateDTO) {
+  async createUser(@Body() userCreateDTO: UserCreateDTO) {
+    console.log(userCreateDTO);
     return await this.userService.createUserMessage(userCreateDTO);
   }
 

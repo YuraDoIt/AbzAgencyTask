@@ -10,6 +10,13 @@ import { UserCreateDTO } from './dto/user-create.dto';
 import { UserResponse } from './dto/user.response';
 import { UserEntity } from './entities/user.entity';
 
+type failsType = {
+  name?: object;
+  phone?: object;
+  email?: object;
+  position_id?: object;
+};
+
 @Injectable()
 export class UserService {
   constructor(
@@ -34,8 +41,18 @@ export class UserService {
 
     if (page < 0 || count < 0 || offset < 0) {
       throw new HttpException(
-        'page || offset || count must be more than 0',
-        HttpStatus.BAD_REQUEST,
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: {
+            success: false,
+            message: 'Validation failed',
+            fails: {
+              count: ['The count must be an integer.'],
+              page: ['The page must be at least 1.'],
+            },
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
 
@@ -62,15 +79,41 @@ export class UserService {
       total_users: await this.getUserCount(),
       count: count,
       links: {
-        next_url: `${nextPage}`,
-        prev_url: `${prevPage}`,
+        next_url:
+          Number(page) + 1 > totalPage
+            ? null
+            : `localhost:3000/users?page=${page}&count=${count}`,
+        prev_url:
+          Number(page) - 1 < 1
+            ? null
+            : `localhost:3000/users?page=${page - 1}&count=${count}`,
       },
       users: users,
     };
   }
 
-  async createUserMessage(UserCreateDTO: UserCreateDTO): Promise<UserEntity> {
-    let fails = {};
+  async createUserMessage(UserCreateDTO: UserCreateDTO): Promise<any> {
+    let fails: failsType = {};
+
+    if (
+      (await this.userRepo.findOne({
+        where: { email: UserCreateDTO.email },
+      })) ||
+      (await this.userRepo.findOne({
+        where: { phone: UserCreateDTO.phone },
+      }))
+    ) {
+      Object.assign(fails, {
+        email: ['mail not match with real mail'],
+      });
+      throw new HttpException(
+        {
+          success: false,
+          message: 'User with this phone or email already exist',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
 
     const emailRegExp = new RegExp(
       /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/,
@@ -79,37 +122,40 @@ export class UserService {
     const phoneRegExp = new RegExp(/^[\+]{0,1}380([0-9]{9})$/);
 
     if (UserCreateDTO.name.length < 2 || UserCreateDTO.name.length > 60) {
-      throw new HttpException(
-        'length of name shoult be > 2 and < 60',
-        HttpStatus.BAD_REQUEST,
-      );
+      Object.assign(fails, {
+        name: ['The name must be at least 2 characters.'],
+      });
     }
 
     if (!emailRegExp.test(UserCreateDTO.email)) {
-      throw new HttpException(
-        'mail not match with real mail',
-        HttpStatus.BAD_REQUEST,
-      );
-    } else {
       Object.assign(fails, {
-        email: ['The email must be a valid email address.'],
+        email: ['mail not match with real mail'],
       });
     }
 
     if (!phoneRegExp.test(UserCreateDTO.phone)) {
-      throw new HttpException(
-        'phone not match with correct phone(+380)',
-        HttpStatus.BAD_REQUEST,
-      );
+      Object.assign(fails, {
+        phone: ['phone not match with correct phone(+380)'],
+      });
     }
 
     if (
       UserCreateDTO.position_id < 1 &&
       typeof UserCreateDTO.position_id != 'bigint'
     ) {
+      Object.assign(fails, {
+        position_id: ['The position id must be an integer.'],
+      });
+    }
+
+    if (fails.name || fails.email || fails.position_id || fails.phone) {
       throw new HttpException(
-        'position_is should be > 1',
-        HttpStatus.BAD_REQUEST,
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          message: 'Validation failed',
+          fails: fails,
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
 
@@ -120,9 +166,6 @@ export class UserService {
       registration_timestamp:
         new Date().getTime() + Math.floor(Math.random() * 1000),
     });
-
-    const token = await this.tokenService.tokenGenerate();
-    console.log(token);
 
     await this.userRepo.insert(userData);
     return userData;
@@ -136,8 +179,9 @@ export class UserService {
       const seedUser = await this.userRepo.create({
         email: faker.internet.email(),
         name: faker.name.fullName(),
-        phone: '+380' + faker.phone.number(),
+        phone: '+380' + (await this.phoneGenerator()),
         registration_timestamp: Date.now(),
+        photo: faker.image.avatar(),
         position: {
           id: Math.ceil(Math.random() * 4),
         },
@@ -191,5 +235,13 @@ export class UserService {
 
   async filterUser(filter: FilterUserDto): Promise<UserEntity[]> {
     return await this.userRepo.find();
+  }
+
+  async phoneGenerator(): Promise<number> {
+    let arr = [];
+    for (let i = 0; i < 9; i++) {
+      arr.push(Math.ceil(Math.random() * 10));
+    }
+    return Number(arr.join(''));
   }
 }

@@ -1,10 +1,8 @@
-import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
 
-export class UserCreateDTO {
+export interface UserCreateDTO {
   name: string;
 
-  @IsEmail()
   email: string;
 
   phone: string;
@@ -13,5 +11,5 @@ export class UserCreateDTO {
 
   registration_timestamp: number;
 
-  photo: string;
+  photo: Express.Multer.File;
 }
