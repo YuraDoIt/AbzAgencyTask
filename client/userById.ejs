@@ -7,29 +7,43 @@
         <main>            
             <div class="row"> -->
                 <div class="col-md-8">
-                    <form method="get" action="http://localhost:3000/api/v1/users/">
+                    <form method="get" action="http://localhost:3000/api/v1/users/1">
                         <div class="form-group">
-                          <label for="name">First and last name</label>
-                          <input type="text" class="form-control" name="name" placeholder="name">
+                            <label for="name">id</label>
+                          <input type="text" class="form-control" name="id" placeholder="id">
+                          <br>
+
+                          <div>
+                            <p>Name: </p>
+                            <p for="name"><%= name %></з>
+                          </div>
+                          
                           <br>
                           
-                          <label for="email">Email</label>
-                          <input type="text" class="form-control" name="email" placeholder="email">
+                          <div>
+                            <p>Email: </p>
+                            <p for="email"><%= email %></p>
+                          </div>
                           <br>
-    
-                          <label for="name">Phone</label>
-                          <input type="text" class="form-control" name="phone" placeholder="+380">
-    
+
+                          <div>
+                            <p>Phone: </p>
+                            <p for="name"><%= phone %></p>
+                          </div>
+
                           <br>
-                          <label for="img">Select image:</label>
-                          <input type="file" id="img" name="img" accept="image/*">
-    
+                          <div>
+                            <p>Image: </p>
+                            <p for="img"><%= photo %></p>
+                          </div>
                         </div>
     
                         <div class="form-group">
                             <button class="btn btn-success" type="submit">Submit</button>
                         </div>
                     </form>
+
+                    
                 </div>
     <%- include ("./chablon/footer.ejs") %>
     

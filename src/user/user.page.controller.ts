@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Req,
   UploadedFile,
@@ -42,6 +43,7 @@ export class UserPageController {
       quotation: user.users,
       current: user.page,
       pages: user.total_pages,
+      count: user.count,
     };
   }
 
@@ -58,6 +60,18 @@ export class UserPageController {
   ) {
     return await this.userService.createUser(file, userCreateDTO);
   }
+
+  // @Get('users/:id')
+  // @Render('userById.ejs')
+  // async getUserById(@Param('id') id: number) {
+  //   let userResult = await this.userService.getUserById(id);
+  //   return {
+  //     name: userResult.user.name,
+  //     email: userResult.user.email,
+  //     phone: userResult.user.phone,
+  //     photo: userResult.user.photo,
+  //   };
+  // }
 
   @Get('*')
   @Render('page404.ejs')
