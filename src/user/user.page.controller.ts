@@ -61,17 +61,18 @@ export class UserPageController {
     return await this.userService.createUser(file, userCreateDTO);
   }
 
-  // @Get('users/:id')
-  // @Render('userById.ejs')
-  // async getUserById(@Param('id') id: number) {
-  //   let userResult = await this.userService.getUserById(id);
-  //   return {
-  //     name: userResult.user.name,
-  //     email: userResult.user.email,
-  //     phone: userResult.user.phone,
-  //     photo: userResult.user.photo,
-  //   };
-  // }
+  @Get('users/:id')
+  @Render('userById.ejs')
+  async getUserById(@Param('id') id: number) {
+    let userResult = await this.userService.getUserById(id);
+    return {
+      user_id: id,
+      name: userResult.user.name,
+      email: userResult.user.email,
+      phone: userResult.user.phone,
+      photo: userResult.user.photo,
+    };
+  }
 
   @Get('*')
   @Render('page404.ejs')

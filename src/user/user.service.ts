@@ -31,7 +31,6 @@ export class UserService {
 
   async findAllUser(query: any): Promise<UserResponse> {
     let { count, page, offset } = query;
-    console.log(query.page);
     if (!page) {
       page = 1;
     }

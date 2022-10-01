@@ -17,11 +17,8 @@ export class TokenService {
     token: any;
   }> {
     let token = await this.jwtService.signAsync({}, { expiresIn: '40m' });
-    console.log(token);
 
     await this.tokenRepo.insert({ token: token });
-
-    console.log(await this.tokenRepo.find());
 
     if (token) {
       return { success: true, token: token };

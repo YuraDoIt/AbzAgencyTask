@@ -34,12 +34,12 @@ import { UserModule } from './user/user.module';
       migrationsRun: true,
       logging: true,
     }),
-    GraphQLModule.forRoot({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: true,
-      sortSchema: true,
-    }),
+    // GraphQLModule.forRoot({
+    //   driver: ApolloDriver,
+    //   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    //   playground: true,
+    //   sortSchema: true,
+    // }),
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],

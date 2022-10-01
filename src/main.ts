@@ -11,9 +11,6 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '../views'));
   app.setBaseViewsDir(join(__dirname, '../client'));
   app.setViewEngine('ejs');
-
-  console.log(Date.now());
-
   await app.listen(port);
 }
 bootstrap();

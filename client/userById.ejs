@@ -7,11 +7,15 @@
         <main>            
             <div class="row"> -->
                 <div class="col-md-8">
-                    <form method="get" action="http://localhost:3000/api/v1/users/1">
+                    <form method="get" action="http://localhost:3000/api/v1/users/<%= user_id %>">
                         <div class="form-group">
-                            <label for="name">id</label>
-                          <input type="text" class="form-control" name="id" placeholder="id">
+                          
                           <br>
+
+                          <div>
+                            <p>Id: </p>
+                            <p for="id"><%= user_id %></з>
+                          </div>
 
                           <div>
                             <p>Name: </p>
@@ -34,7 +38,7 @@
                           <br>
                           <div>
                             <p>Image: </p>
-                            <p for="img"><%= photo %></p>
+                            <p for="img"><a href="<%= photo %>"><%= photo %></a></p>
                           </div>
                         </div>
     

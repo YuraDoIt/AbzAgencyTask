@@ -15,7 +15,6 @@ export class PositionService {
   async getPosition(): Promise<any> {
     const position = await this.positionRepo.find();
 
-    console.log(position);
     if (!(typeof position !== 'undefined' && position.length > 0)) {
       throw new HttpException(
         'Cannot find any position',
