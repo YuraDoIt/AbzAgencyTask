@@ -1,18 +1,17 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CloudinaryService } from '../photo/cloudinary.service';
-import { PositionEntity } from '../positions/entity/position.entity';
-import { PositionModule } from '../positions/position.module';
-import { PositionService } from '../positions/position.service';
-import { TokenEntity } from '../token/entity/token.entity';
-import { TokenModule } from '../token/token.module';
-import { TokenService } from '../token/token.service';
-import { UserEntity } from './entities/user.entity';
-import { UserController } from './user.controller';
-import { UserPageController } from './user.page.controller';
-import { UserResolver } from './user.resolver';
-import { UserService } from './user.service';
+import { CloudinaryService } from 'src/photo/cloudinary.service';
+import { PositionEntity } from 'src/positions/entity/position.entity';
+import { PositionModule } from 'src/positions/position.module';
+import { PositionService } from 'src/positions/position.service';
+import { TokenEntity } from 'src/token/entity/token.entity';
+import { TokenModule } from 'src/token/token.module';
+import { TokenService } from 'src/token/token.service';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { UserController } from 'src/user/user.controller';
+import { UserPageController } from 'src/user/user.page.controller';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
@@ -21,7 +20,6 @@ import { UserService } from './user.service';
     PositionModule,
   ],
   providers: [
-    UserResolver,
     UserService,
     JwtService,
     TokenService,

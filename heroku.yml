@@ -1,0 +1,31 @@
+services:
+  web:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: managment-app:latest
+    container_name: nest-managment-app
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - '8080:3000'
+
+    environment:
+      DATABASE_URL: postgres://yura:yurapass@postgres:5432/managment
+      PORT: 3000
+
+  postgres:
+    image: postgres
+    container_name: postgres-db
+    restart: always
+    ports:
+      - '35000:5432'
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=yura
+      - POSTGRES_PASSWORD=yurapass
+      - POSTGRES_DB=managment
+
+build:
+  web: bundle exec puma -C config/puma.rb

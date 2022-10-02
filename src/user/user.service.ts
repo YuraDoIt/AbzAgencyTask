@@ -2,14 +2,14 @@ import { faker } from '@faker-js/faker';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CloudinaryService } from '../photo/cloudinary.service';
-import { PositionEntity } from '../positions/entity/position.entity';
-import { PositionService } from '../positions/position.service';
-import { TokenService } from './../token/token.service';
-import { FilterUserDto } from './dto/filter-user.dto';
-import { UserCreateDTO } from './dto/user-create.dto';
-import { UserResponse } from './dto/user.response';
-import { UserEntity } from './entities/user.entity';
+import { CloudinaryService } from 'src/photo/cloudinary.service';
+import { PositionEntity } from 'src/positions/entity/position.entity';
+import { PositionService } from 'src/positions/position.service';
+import { TokenService } from 'src/token/token.service';
+import { FilterUserDto } from 'src/user/dto/filter-user.dto';
+import { UserCreateDTO } from 'src/user/dto/user-create.dto';
+import { UserResponse } from 'src/user/dto/user.response';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 type failsType = {
   name?: object;
@@ -84,15 +84,11 @@ export class UserService {
         next_url:
           Number(page) + 1 > totalPage
             ? null
-            : `http://localhost:3000/api/v1/table?page=${
-                page + 1
-              }&count=${count}`,
+            : `/api/v1/table?page=${page + 1}&count=${count}`,
         prev_url:
           Number(page) - 1 < 1
             ? null
-            : `http://localhost:3000/api/v1/table?page=${Number(
-                page - 1,
-              )}&count=${count}`,
+            : `/api/v1/table?page=${Number(page - 1)}&count=${count}`,
       },
       users: users,
     };

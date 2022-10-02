@@ -1,8 +1,7 @@
 import { Controller, Get, Render, UseGuards } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule/dist';
-import { AuthGuard } from '../guards/auth.guard';
-import { TokenResponse } from './dto/token.response';
-import { TokenService } from './token.service';
+import { TokenResponse } from 'src/token/dto/token.response';
+import { TokenService } from 'src/token/token.service';
 
 @Controller()
 export class TokenController {

@@ -12,10 +12,10 @@ import {
 import { Render } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import { AuthGuard } from '../guards/auth.guard';
-import { TokenService } from '../token/token.service';
-import { UserCreateDTO } from './dto/user-create.dto';
-import { UserService } from './user.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { TokenService } from 'src/token/token.service';
+import { UserCreateDTO } from 'src/user/dto/user-create.dto';
+import { UserService } from 'src/user/user.service';
 
 @Controller('api/v1')
 export class UserPageController {
@@ -50,6 +50,12 @@ export class UserPageController {
   @Get('/create')
   @Render('createUser.ejs')
   async createUserHtml() {}
+
+  @Get('/delete')
+  @Render('createUser.ejs')
+  async deleteUsers() {
+    return await this.userService.deleteAllUsers();
+  }
 
   // @UseGuards(AuthGuard)
   @Post('/users')

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TokenEntity } from './entity/token.entity';
+import { TokenEntity } from 'src/token/entity/token.entity';
 import { isJwtExpired } from 'jwt-check-expiration';
 
 @Injectable()

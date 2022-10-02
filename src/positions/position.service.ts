@@ -3,7 +3,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GraphQLError } from 'graphql';
 import { Repository } from 'typeorm';
-import { PositionEntity } from './entity/position.entity';
+import { PositionEntity } from 'src/positions/entity/position.entity';
 
 @Injectable()
 export class PositionService {

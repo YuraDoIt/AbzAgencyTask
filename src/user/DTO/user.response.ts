@@ -1,4 +1,4 @@
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 export class UserResponse {
   success?: boolean;

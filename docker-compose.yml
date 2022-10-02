@@ -1,33 +1,40 @@
 version: '3'
 
 services:
-  db:
-      image: postgres
+  user-server-app:
+      build: 
+        dockerfile: Dockerfile
+        context: .
+      image: managment-app:latest
+      container_name: nest-managment-app
       restart: always
+      depends_on:
+        - postgres
+      ports: 
+      - "8080:3000"
+      # volumes:
+      #   - .:/app
+      #   - /app/node_modules
+      environment:
+        DATABASE_URL: postgres://yura:yurapass@postgres:5432/managment
+        PORT: 3000
+      
+  postgres:
+      image: postgres
+      container_name: postgres-db
+      restart: always
+      ports:
+        - "35000:5432"
       environment:
         - POSTGRES_HOST_AUTH_METHOD=trust
         - POSTGRES_USER=yura
         - POSTGRES_PASSWORD=yurapass
         - POSTGRES_DB=managment
-      container_name: postgres-db
-      volumes:
-        - ./pgdata:/var/lib/postgresql/data
-
-  server:
-    build: ./
-    image: managment-app:latest
-    restart: always
-    ports: 
-    - "3000:3000"
-    container_name: nest-managment-app
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - db
+#       volumes:
+#         - ./pgdata:/var/lib/postgresql/data
   
-volumes:
-  pgdata:
-    driver: local  
+# volumes:
+#   pgdata:
+#     driver: local  
   
   

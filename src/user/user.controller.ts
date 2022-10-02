@@ -12,10 +12,10 @@ import {
 import { Delete, Render } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import { AuthGuard } from '../guards/auth.guard';
-import { UserCreateDTO } from './dto/user-create.dto';
-import { UserResponse } from './dto/user.response';
-import { UserService } from './user.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { UserCreateDTO } from 'src/user/dto/user-create.dto';
+import { UserResponse } from 'src/user/dto/user.response';
+import { UserService } from 'src/user/user.service';
 
 @Controller()
 export class UserController {
