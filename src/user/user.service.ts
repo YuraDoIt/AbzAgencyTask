@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CloudinaryService } from 'src/photo/cloudinary.service';
+import { CloudinaryService } from '../photo/cloudinary.service';
 import { PositionEntity } from 'src/positions/entity/position.entity';
 import { PositionService } from 'src/positions/position.service';
 import { TokenService } from 'src/token/token.service';
