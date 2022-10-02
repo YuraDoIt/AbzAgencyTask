@@ -1,7 +1,8 @@
 ##
 
 1. Download project
-2. Run npm run start:container
+2. npm run start:container
+3. npm run dev - To run this project locally
 
 ## Description
 
