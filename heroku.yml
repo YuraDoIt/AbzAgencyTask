@@ -6,21 +6,21 @@ services:
     image: managment-app:latest
     container_name: nest-managment-app
     restart: always
-    depends_on:
-      - postgres
     ports:
-      - '8080:3000'
+      - '5050:5050'
 
     environment:
       DATABASE_URL: postgres://yura:yurapass@postgres:5432/managment
-      PORT: 3000
+      PORT: 5050
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres
     container_name: postgres-db
     restart: always
     ports:
-      - '35000:5432'
+      - '5432:5432'
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=yura
@@ -28,4 +28,5 @@ services:
       - POSTGRES_DB=managment
 
 build:
-  web: bundle exec puma -C config/puma.rb
+  postgres:
+  web:

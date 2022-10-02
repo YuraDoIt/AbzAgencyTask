@@ -30,6 +30,8 @@ services:
         - POSTGRES_USER=yura
         - POSTGRES_PASSWORD=yurapass
         - POSTGRES_DB=managment
+  
+      
 #       volumes:
 #         - ./pgdata:/var/lib/postgresql/data
   

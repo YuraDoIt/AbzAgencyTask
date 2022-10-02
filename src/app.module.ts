@@ -23,7 +23,7 @@ import { UserModule } from 'src/user/user.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.DATABASE_URL,
+      url: 'postgres://yura:yurapass@postgres:5432/managment',
       autoLoadEntities: true,
       synchronize: true,
       // dropSchema: true,

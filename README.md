@@ -1,6 +1,11 @@
+##
+
+1. Download project
+2. Run npm run start:container
+
 ## Description
 
-This is task Abz 
+This is task Abz
 
 ## Installation
 
@@ -21,20 +26,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-
 ## Docker run
+
 docker build -t abz-app-image .
 docker run -d -p 3000:3000 --name abz-app abz-app-image
