@@ -3,6 +3,8 @@
 1. Download project
 2. npm run start:container
 3. npm run dev - To run this project locally
+4. Goto http://localhost:8080/api/v1/
+5. You can also make request using Postman http://localhost:8080/
 
 ## Description
 

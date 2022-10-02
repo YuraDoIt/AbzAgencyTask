@@ -18,8 +18,6 @@ services:
       environment:
         DATABASE_URL: postgres://yura:yurapass@postgres-db:5432/managment
         PORT: 3000
-      networks:
-        - web-networks
       
   postgres:
       image: postgres
@@ -32,8 +30,6 @@ services:
         - POSTGRES_USER=yura
         - POSTGRES_PASSWORD=yurapass
         - POSTGRES_DB=managment
-      networks:
-        - web-networks
 
    
       
